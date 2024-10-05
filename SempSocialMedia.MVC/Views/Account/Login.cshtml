@@ -1,0 +1,49 @@
+﻿@using SempSocialMedia.BLL.ViewModel.AccountVM
+@model LoginVM
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<div class="card">
+    <div class="card-body">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Login" asp-controller="Account" enctype="multipart/form-data">
+
+                    <div class="form-floating">
+                        <input asp-for="Username" type="text" class="form-control" id="exampleInputUserAge" placeholder="Email">
+                        <span class="text-danger" asp-validation-for="Username"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputUserAge">Email</label>
+                        <input asp-for="Email" type="email" class="form-control" id="exampleInputUserAge" placeholder="Email">
+                        <span class="text-danger" asp-validation-for="Email"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputUserPassword">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" id="exampleInputUserPassword" placeholder="Password">
+                        <span class="text-danger" asp-validation-for="Password"></span>
+
+                    </div>
+
+
+                  
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/validation-styling.js"></script>
+}
