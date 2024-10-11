@@ -40,6 +40,7 @@ namespace SempSocialMedia.MVC
 
 
             builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                             .AddEntityFrameworkStores<SempSocialMediaDbContext>()
                             .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
@@ -61,10 +62,12 @@ namespace SempSocialMedia.MVC
 
             //Dependancy Injection Service Life Time Repo
             builder.Services.AddTransient<IPostRepo, PostRepo>();
+            builder.Services.AddTransient<IUserRepo, UserRepo>();
 
 
             //Dependancy Injection Service Life Time Service
-            builder.Services.AddTransient<IPostService, PostService>();
+            builder.Services.AddTransient<IPostService,PostService>();
+            builder.Services.AddTransient<IUserService,UserServices>();
 
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SempSocialMedia.BLL.ViewModel.UserVM;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,8 @@ namespace SempSocialMedia.BLL.ViewModel.PostVM
         public DateTime CreatedOn { get; set; }
 
         public string UserName { get; set; }
+        public string ImageUser { get; set; }
+
+
     }
 }

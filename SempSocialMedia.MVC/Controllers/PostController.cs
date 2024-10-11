@@ -1,25 +1,37 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SempSocialMedia.BLL.Service.Abstraction;
 using SempSocialMedia.BLL.ViewModel.PostVM;
+using SempSocialMedia.DAL.Entities;
 
 namespace SempSocialMedia.MVC.Controllers
 {
-    [Authorize("Admin")]
+    //[Authorize(Roles = $"User")]
     public class PostController : Controller
     {
         private readonly IPostService postService;
+        private readonly IUserService userService;
+        private readonly SignInManager<User> signInManager;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService,IUserService userService, SignInManager<User> signInManager)
         {
             this.postService=postService;
+            this.userService=userService;
+            this.signInManager=signInManager;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         
         {
-            var Result = postService.GetAll();
-            return View(Result);
+            var posts = postService.GetAll();
+
+            PublicPostsVM publicPosts = new PublicPostsVM()
+            {
+                postsVMs =posts,
+                User =(await userService.GetUserByUserName(User.Identity.Name))
+            };
+            return View(publicPosts);
         }
         [HttpGet]
         public IActionResult Create()
@@ -29,24 +41,13 @@ namespace SempSocialMedia.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreatePostVM createPostVM)
+        public async Task<IActionResult>  Create(CreatePostVM createPostVM)
         {
-            //Hang Fire
-            PrintInConsole();
-            //BackgroundJob.Enqueue(() => PrintHello()); //Send email
-            ////BackgroundJob.Schedule(() => postService.Create(createPostVM), TimeSpan.FromMinutes(1));
-            RecurringJob.AddOrUpdate(() => postService.Create(createPostVM), Cron.Monthly);
-            return View();
+            var user = await userService.GetUserByUserName(User.Identity.Name);
+            createPostVM.UserId = user.Id;
+            var Result = postService.Create(createPostVM);
+            return RedirectToAction("Index");
         }
-        public void PrintInConsole()
-        {
-            Console.WriteLine("Welcome");
-        }
-
-        public void PrintHello()
-        {
-            Console.WriteLine("Hello");
-
-        }
+       
     }
 }

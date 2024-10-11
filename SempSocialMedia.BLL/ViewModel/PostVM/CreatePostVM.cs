@@ -17,6 +17,6 @@ namespace SempSocialMedia.BLL.ViewModel.PostVM
         public string? Image { get; set; }
         [Required]
         public string Body { get; set; }
-        public long? UserId { get; set; }
+        public string? UserId { get; set; }
     }
 }

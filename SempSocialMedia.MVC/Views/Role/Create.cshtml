@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IdentityRole
+<div class="card">
+    <div class="card-body">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Create" asp-controller="Role" enctype="multipart/form-data">
+
+                  
+                    <div class="form-group">
+                        <label for="exampleInputUserAge">Name</label>
+                        <input asp-for="Name" type="text" class="form-control" id="exampleInputUserAge" placeholder="Name">
+                        <span class="text-danger" asp-validation-for="Name"></span>
+
+                    </div>
+                   
+
+
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/validation-styling.js"></script>
+}

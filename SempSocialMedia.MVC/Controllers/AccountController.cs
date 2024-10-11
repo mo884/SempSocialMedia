@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SempSocialMedia.BLL.Service.Abstraction;
 using SempSocialMedia.BLL.ViewModel.AccountVM;
 using SempSocialMedia.DAL.Entities;
 
@@ -9,11 +10,13 @@ namespace SempSocialMedia.MVC.Controllers
     {
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IUserService userService;
 
-        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager)
+        public AccountController(UserManager<User> userManager,SignInManager<User> signInManager,IUserService userService)
         {
             this.userManager=userManager;
             this.signInManager=signInManager;
+            this.userService=userService;
         }
         [HttpGet]
         public IActionResult SignUP()
@@ -23,27 +26,16 @@ namespace SempSocialMedia.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> SignUP(SignUPVM model)
         {
-            
-            var user = new User()
+            if(ModelState.IsValid)
             {
-                UserName = model.Username,
-                Email = model.Email
-            };
-
-            var result = await userManager.CreateAsync(user, model.Password);//Passward ==> Hash
-
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index","Post");
-            }
-            else
-            {
-                foreach (var item in result.Errors)
+                var Result =await userService.Registeration(model);
+                if(Result==true)
                 {
-                    ModelState.AddModelError("", item.Description);
+                    return RedirectToAction("Login");
                 }
+                
             }
-            return View();
+            return View(model);
         }
 
         [HttpGet]
@@ -55,18 +47,17 @@ namespace SempSocialMedia.MVC.Controllers
         [HttpPost]
         public async Task< IActionResult> Login(LoginVM model)
         {
-            var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-
-            if (result.Succeeded)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Post");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid UserName Or Password");
+                var Result = await userService.Login(model);
+                if (Result==true)
+                {
+                    return RedirectToAction("Index","Post");
+                }
 
             }
-            return View();
+            return View(model);
+
         }
     }
 }
